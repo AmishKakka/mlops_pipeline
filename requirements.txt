@@ -1,0 +1,6 @@
+numpy
+polars
+scikit-learn
+torch
+opencv-python
+PyYAML

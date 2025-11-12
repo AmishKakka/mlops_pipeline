@@ -1,0 +1,14 @@
+data:
+  source_type: "csv"
+  path: ""
+  read_params:
+    sep: ","
+    header: true
+    encoding: "utf-8"
+    sheet_name: null
+  schema:
+    target_column: ""
+    drop_columns: []
+    categorical_features: []
+    numerical_features: []
+    test_split: 0.2
