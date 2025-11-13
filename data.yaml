@@ -1,6 +1,6 @@
 data:
   # Declare your data source --> ["parquet", "api", "csv", "excel"]
-  source_type: ""
+  source_type: "api"
   # The api to request data from if using "api" data source
   api: "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-03.parquet"
   # The local path to your file
@@ -13,8 +13,8 @@ data:
     sheet_name: null
   # Define the schema of what your data should or should not have 
   schema:
-    target_column: []
-    drop_columns: []
+    target_column: ["congestion_surcharge", "airport_fee"]
+    drop_columns: ["tpep_pickup_datetime", "tpep_dropoff_datetime"]
     categorical_features: []
     numerical_features: []
     test_split: 0.2
