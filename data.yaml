@@ -13,8 +13,8 @@ data:
     sheet_name: null
   # Define the schema of what your data should or should not have 
   schema:
-    target_column: ["congestion_surcharge", "airport_fee"]
-    drop_columns: ["tpep_pickup_datetime", "tpep_dropoff_datetime"]
+    target_column: ["airport_fee"]
+    drop_columns: ["tpep_pickup_datetime", "tpep_dropoff_datetime", "store_and_fwd_flag"]
     categorical_features: []
     numerical_features: []
     test_split: 0.2

@@ -29,14 +29,13 @@ def load_yaml_file(filepath: str):
     return df, schema
 
 def get_data_info(df):
-    # print("Columns: ", df.columns)
-    # print("\nColumn dtype: ", df.schema.values())
-    # pprint(df.describe())
+    print("Columns: ", df.columns)
+    print("\nColumn dtype: ", df.schema.values())
+    pprint(df.describe())
     return df.schema
     
     
 # ------------------------------------------------------------------- #
 if __name__ == "__main__":
     df, schema = load_yaml_file(filepath="data.yaml")
-    
-    # data_loader.get_data_info(x)
+    get_data_info(df)
