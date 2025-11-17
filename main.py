@@ -47,16 +47,6 @@ if __name__ == "__main__":
     df, schema = load_yaml_file(filepath="data.yaml")
     df_schema = get_data_info(df)
     
-    # Data Cleaning
-    drop_cols = schema.get('drop_columns', [])
-    df = df.drop(drop_cols)
-    df = df.with_columns(
-            cs.numeric().fill_null(0),
-            cs.string().fill_null("missing_value"),
-            cs.temporal().fill_null(pl.lit("1970-01-01").str.to_datetime())
-        )
-    print("Data cleaning done...")
-    
     # Get user's input for type of task to do
     print("1. Regression \t 2. Classification \t 3. Clustering")
     task_type = ''
@@ -69,11 +59,9 @@ if __name__ == "__main__":
     print(json_analysis)
     
     # Create Transformation Pipeline from Analysis object
-    pipeline = create_transformation_pipeline(analysis)
-    print(pipeline)
-    print("Data Transformation...")
-    df_transformed = pipeline.fit_transform(X=df)
+    df_transformed = transformation_pipeline(analysis, df)
     print(df_transformed)
+
 
     # -------------------------------------------------------------------------- #
     # Regression task
@@ -89,14 +77,14 @@ if __name__ == "__main__":
         for model_suggested in analysis.suggested_regression_models:
             # Getting the model name and initializing it...
             model_cls = REGRESSOR_MAP[model_suggested.model_name]
-            model = model_cls(**model_suggested.hyperparameters, verbose=1)
+            model = model_cls(**model_suggested.hyperparameters)
             
             # Model training...
-            model.fit(X_train, y_train)
-            pprint(model.get_params())
+            trained_model = model.fit(X_train, y_train)
+            pprint(trained_model.get_params())
 
             # Getting R^2 score for Regression model...
-            score = model.score(X_test, y_test)
+            score = trained_model.score(X_test, y_test)
             print(f"{model_suggested.model_name} Model Score: {score:.3f}")
     
     # Classification task
@@ -112,14 +100,14 @@ if __name__ == "__main__":
         for model_suggested in analysis.suggested_classification_models:
             # Getting the model name and initializing it...
             model_cls = CLASSIFIER_MAP[model_suggested.model_name]
-            model = model_cls(**model_suggested.hyperparameters, verbose=1)
+            model = model_cls(**model_suggested.hyperparameters)
             
             # Model training...
-            model.fit(X_train, y_train)
-            pprint(model.get_params())
+            trained_model = model.fit(X_train, y_train)
+            pprint(trained_model.get_params())
 
             # Getting the accuracy for the Classification model...
-            score = model.score(X_test, y_test)
+            score = trained_model.score(X_test, y_test)
             print(f"{model_suggested.model_name} Model Score: {score:.3f}")
     
     # Clustering task
@@ -129,7 +117,7 @@ if __name__ == "__main__":
         for model_suggested in analysis.suggested_clustering_models:
             # Getting the model name and initializing it...
             model_cls = CLUSTERER_MAP[model_suggested.model_name]
-            model = model_cls(**model_suggested.hyperparameters, verbose=1)
+            model = model_cls(**model_suggested.hyperparameters)
             
             # Model training...
             model.fit(df_transformed)

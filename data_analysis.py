@@ -9,12 +9,9 @@ class Transformation(BaseModel):
     columns: List[str] = Field(
         description="List of column names this transformation applies to.")
     transformer: Literal[
-        "SimpleImputer",
         "StandardScaler",
         "MinMaxScaler",
         "RobustScaler",
-        "OneHotEncoder",
-        "OrdinalEncoder",
         "LabelEncoder"
     ] = Field(description="The sklearn class name of the transformer to use.")
     parameters: Dict[str, Any] = Field(
@@ -79,9 +76,12 @@ def get_analysis(df_head, schema, task_type):
         contents=f"You are an expert data scientist. Please analyze the dataset containing sample data - {df_head.to_dicts()} and schema: {schema}. \
                 I want to perform {task[int(task_type)]} task on this dataset. \
                 **TRANSFORMATION RULES:** \
-                    1. Suggest transformations from this *exact* list: ['SimpleImputer', 'StandardScaler', 'MinMaxScaler', 'RobustScaler', 'OrdinalEncoder']. \
-                    2. **CRITICAL:** NEVER suggest 'LabelEncoder'. It is only for target variables, not features. Use 'OrdinalEncoder' for categorical features instead. \
-                    3. **CRITICAL:** If you suggest 'OneHotEncoder', you MUST include the parameter 'sparse_output=False' in its parameters dictionary. \
+                    1. Suggest transformations from this *exact* list: ['StandardScaler', 'MinMaxScaler', 'RobustScaler', 'LabelEncoder']. \
+                    2. For SimpleImputer, beware of different types like Int64/Float64, String, and Datetime. \
+                        You must suggest different strategies for String (like 'mode' or 'constant' and provide the fill_value if needed) and different \
+                        strategy for Datetime() (like 'mean', 'median', or 'mode'). \
+                    3. **CRITICAL:** NEVER suggest 'LabelEncoder'. It is only for target variables, not features. Use 'OrdinalEncoder' for categorical features instead. \
+                    4. **CRITICAL:** If you suggest 'OneHotEncoder', you MUST include the parameter 'sparse_output=False' in its parameters dictionary. \
                 \
                 **MODEL RULES:** \
                     1. Which task is most appropriate: 'classification', 'regression', or 'clustering'? \

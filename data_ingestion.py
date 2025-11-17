@@ -31,7 +31,6 @@ def load_yaml_file(filepath: str):
 def get_data_info(df):
     print("Columns: ", df.columns)
     print("\nColumn dtype: ", df.schema.values())
-    pprint(df.describe())
     return df.schema
     
     
