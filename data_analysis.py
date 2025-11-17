@@ -79,7 +79,7 @@ def get_analysis(df_head, schema, task_type):
         contents=f"You are an expert data scientist. Please analyze the dataset containing sample data - {df_head.to_dicts()} and schema: {schema}. \
                 I want to perform {task[int(task_type)]} task on this dataset. \
                 **TRANSFORMATION RULES:** \
-                    1. Suggest transformations from this *exact* list: ['SimpleImputer', 'StandardScaler', 'MinMaxScaler', 'RobustScaler', 'OneHotEncoder', 'OrdinalEncoder']. \
+                    1. Suggest transformations from this *exact* list: ['SimpleImputer', 'StandardScaler', 'MinMaxScaler', 'RobustScaler', 'OrdinalEncoder']. \
                     2. **CRITICAL:** NEVER suggest 'LabelEncoder'. It is only for target variables, not features. Use 'OrdinalEncoder' for categorical features instead. \
                     3. **CRITICAL:** If you suggest 'OneHotEncoder', you MUST include the parameter 'sparse_output=False' in its parameters dictionary. \
                 \
